@@ -1,7 +1,55 @@
+<script type="text/javascript" src="/src/categoria/categoria.js"></script>
+<script type="text/javascript">
+    var id = window.location.pathname.match(/\d+$/);
+    function preencherCategoria() {
+        var form = document.getElementById("form-categoria");
+        if (id) {
+            let status = 0;
+            buscarCategorias(id[0]).then(r => {
+                status = r.status;
+                return r.json();
+            }).then(resposta => {
+                if (status != 200)
+                    processarErros(resposta);
+                else
+                    preencherDadosForm(resposta, form);
+            });
+        }
+    }
+
+    function salvar(event) {
+        event.preventDefault();
+        var form = event.target;
+        var method = "POST";
+        if (id) {
+            method = "PUT";
+        }
+        var data = formDataToJson(form, id && id[0]);
+        let status = 0;
+        salvarCategoria(data.string, method)
+            .then(r => {
+                status = r.status;
+                if (status == 401) {
+                    return { mensagem: "Usuário não autorizado." };
+                }
+                return r.json();
+            })
+            .then(resposta => {
+                if (status != 200) {
+                    processarErros(resposta);
+                } else {
+                    transitionTo(null, "/categorias");
+                }
+            });
+    }
+
+    setTimeout(preencherCategoria, 10);
+</script>
+
 <div class="row">
     <div class="col-md-6">
         <h3 id="header-form">Categoria</h3>
-        <form>
+        <form id="form-categoria" onsubmit="salvar(event)">
             <div class="form-group">
                 <label for="nome" class="control-label">Nome: </label>
                 <input required name="nome" class="form-control" />
@@ -14,5 +62,6 @@
                 <button type="submit" class="btn btn-default">Salvar</button>
             </div>
         </form>
+        <p class="text-danger" id="erros_form"></p>
     </div>
 </div>

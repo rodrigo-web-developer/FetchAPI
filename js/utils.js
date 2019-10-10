@@ -5,7 +5,7 @@ function processarErros(erros) {
             mensagem += e.memberNames[0] + ": " + e.errorMessage + "<br>";
         });
     } else if (erros.mensagem) {
-        mensagem = erros.mensagem;
+        mensagem = erros.mensagem || erros.message;
     }
     var x = document.getElementById("erros_form");
     if (x) {
@@ -13,9 +13,10 @@ function processarErros(erros) {
     }
 }
 
-function formDataToJson(form) {
+function formDataToJson(form, id) {
     var data = new FormData(form);
     var json = {};
+    if (id) json.id = id;
     for (const item of data.keys()) {
         json[item] = data.get(item);
     }
@@ -26,12 +27,11 @@ function getUrlApi() {
     return "http://semanati2019fetch.azurewebsites.net";
 }
 
-function getValue(obj, prop){
+function getValue(obj, prop) {
     var x = prop.split(".");
     var a = obj;
-    for(var p of prop){
+    for (var p of x)
         a = a[p];
-    }
     return a;
 }
 
@@ -44,18 +44,43 @@ function addTableLines(data, columns, tableId) {
         columns.forEach(c => {
             tr += "<td>" + getValue(d, c) + "</td>"
         });
-        tr += '<td><a href="#" onclick="transitionTo(event, \'/'+ tableId +'/editar/'+ d["id"] +'\')" href="/" class="btn btn-warning">Editar</a></td>';
-        tr += '<td><a href="#" href="/" class="btn btn-danger">Deletar</a></td></tr>';
+        tr += '<td><button onclick="transitionTo(event, \'/' + tableId + '/editar/' + d.id + '\')" class="btn btn-warning">Editar</button></td>';
+        tr += '<td><button onclick="deletar(' + d.id + ')" class="btn btn-danger">Deletar</button></td></tr>';
         tbody.innerHTML += tr;
     });
 }
 
-function updateSuperiorDireito(){
+function updateSuperiorDireito() {
     var x = localStorage.getItem("userName");
     var element = document.getElementById("superior_direito");
-    if(x){
-        element.innerHTML = '<label class="text-success">Bem-vindo, '+ x +' </label><button class="btn btn-outline-warning my-2 my-sm-0" onclick="transitionTo(event, \'/logout\')" type="submit">Logout</button>';
-    } else{
+    if (x) {
+        element.innerHTML = '<label class="text-success">Bem-vindo, ' + x + ' </label><button class="btn btn-outline-warning my-2 my-sm-0" onclick="transitionTo(event, \'/logout\')" type="submit">Logout</button>';
+    } else {
         element.innerHTML = '<button class="btn btn-outline-success my-2 my-sm-0" onclick="transitionTo(event, \'/login\')" type="submit">Login</button>';
     }
+}
+
+function preencherDadosForm(dados, form) {
+    var inputs = form.getElementsByTagName("input");
+    var textareas = form.getElementsByTagName("textarea");
+    for (let index = 0; index < inputs.length; index++) {
+        const input = inputs[index];
+        input.value = dados[input.name]
+    }
+    for (let index = 0; index < textareas.length; index++) {
+        const textarea = textareas[index];
+        textarea.innerHTML = dados[textarea.name];
+    }
+    var selects = form.getElementsByTagName("select");
+    for (let index = 0; index < selects.length; index++) {
+        const select = selects[index];
+        select.value = dados[select.name];
+    }
+}
+
+function loadDropDown(dados, element, texto) {
+    element.innerHTML = "";
+    dados.forEach(d => {
+        element.innerHTML += '<option value="' + d.id + '">' + d[texto] + '</option>';
+    });
 }

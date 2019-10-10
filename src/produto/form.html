@@ -1,7 +1,12 @@
+<script src="/src/categoria/categoria.js"></script>
+<script>
+    
+</script>
+
 <div class="row">
     <div class="col-md-6">
         <h3 id="header-form">Produto</h3>
-        <form>
+        <form onsubmit="teste(event)">
             <div class="form-group">
                 <label for="nome" class="control-label">Nome: </label>
                 <input required name="nome" class="form-control" />
@@ -16,7 +21,7 @@
             </div>
             <div class="form-group">
                 <label for="descricao">Categoria: </label>
-                <select class="form-control" name="categoria"></select>
+                <select style="overflow-y:scroll; max-height: 80px;" class="form-control" name="categoria" id="select-categoria"></select>
             </div>
             <div class="form-group">
                 <label for="descricao">Descrição: </label>
@@ -26,5 +31,6 @@
                 <button type="submit" class="btn btn-default">Salvar</button>
             </div>
         </form>
+        <p class="text-danger" id="erros_form"></p>
     </div>
 </div>

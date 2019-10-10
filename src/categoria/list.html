@@ -1,18 +1,21 @@
+<script src="/src/categoria/categoria.js"></script>
 <script type="text/javascript">
     function listar() {
         let status = 0;
-        fetch(getUrlApi() + "/api/categoria")
-            .then(r => {
-                status = r.status;
-                return r.json();
-            }).then(resposta => {
-                if (status != 200) {
-                    processarErros(resposta);
-                } else {
-                    console.log(resposta);
-                    addTableLines(resposta, ["id", "nome", "descricao"], "categorias");
-                }
-            });
+        buscarCategorias().then(r => {
+            status = r.status;
+            if (status == 401) {
+                return { mensagem: "Usuário não autorizado.", status };
+            }
+            return r.json();
+        }).then(resposta => {
+            if (status != 200) {
+                processarErros(resposta);
+            } else {
+                console.log(resposta);
+                addTableLines(resposta, ["id", "nome", "descricao"], "categorias");
+            }
+        });
     }
     setTimeout(listar, 500);
 </script>
@@ -33,13 +36,6 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td> ID </td>
-                        <td> Nome </td>
-                        <td> Descricao </td>
-                        <td><a href="#" href="/" class="btn btn-warning">Editar</a></td>
-                        <td><a href="#" href="/" class="btn btn-danger">Deletar</a></td>
-                    </tr>
                 </tbody>
             </table>
         </div>
