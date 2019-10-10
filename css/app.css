@@ -1,0 +1,8 @@
+div#conteudo{
+    padding: 10px;
+    margin-left: 50px;
+}
+
+a.pull-right{
+    float: right;
+}

@@ -1,0 +1,49 @@
+<script type="text/javascript">
+    function login(event) {
+        event.preventDefault();
+        var form = event.target;
+        var data = formDataToJson(form);
+        let status = 0;
+        fetch(getUrlApi() + "/api/usuario/login", {
+            body: data.string,
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            method: "POST"
+        }).then(r => {
+            status = r.status;
+            return r.json();
+        }).then(resposta => {
+            if(status != 200){
+                processarErros(resposta);
+            } else{
+                localStorage.setItem("token", resposta.accessToken);
+                localStorage.setItem("userName", resposta.userName);
+                updateSuperiorDireito();
+                transitionTo(null, "/");
+            }
+        });
+    }
+</script>
+
+<div class="row">
+    <div class="col-md-6">
+        <h3 id="header-form">Entre com sua conta</h3>
+        <form onsubmit="login(event)">
+            <div class="form-group">
+                <label for="email" class="control-label">E-mail: </label>
+                <input type="email" data-value-missing="Translate('O campo e-mail é obrigatório')" required name="email"
+                    class="form-control" />
+            </div>
+            <div class="form-group">
+                <label for="password" class="control-label">Senha: </label>
+                <input required type="password" name="password" class="form-control" />
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-default">Salvar</button>
+            </div>
+        </form>
+        <p class="text-danger" id="erros_form"></p>
+    </div>
+</div>
