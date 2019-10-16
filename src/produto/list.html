@@ -1,3 +1,40 @@
+<script type="text/javascript">
+    function listar() {
+        let status = 0;
+        fetch(getUrlApi() + "/api/produto/").then(r => {
+            status = r.status;
+            return r.json();
+        }).then(resposta => {
+            if (status != 200) {
+                processarErros(resposta);
+            } else {
+                addTableLines(resposta, ["id", "nome", "preco", "categoria.descricao"], "produtos");
+            }
+        });
+    }
+
+    async function deletar(id) {
+        let status = 0;
+        var r = await fetch(getUrlApi() + "/api/produto/" + id, {
+            headers: {
+                "Authorization": "Bearer " + localStorage.getItem("token")
+            },
+            method: "DELETE"
+        });
+        if (r.status == 401) {
+            return processarErros({ mensagem: "Usuário não autorizado.", status: r.status });
+        }
+        var res = await r.json();
+        if (r.status == 200) {
+            alert("Registro deletado com sucesso");
+            transitionTo(null, "/produtos");
+        } else {
+            processarErros(res);
+        }
+    }
+
+    setTimeout(listar, 500);
+</script>
 <div>
     <!--
         <tr><td>{p.id}</td><td>{p.nome}</td><td>R$ {p.preco.toFixed(2)}</td><td>{p.categoria.nome}</td></tr>
@@ -5,8 +42,9 @@
     <h2>Produtos</h2>
     <div class="row">
         <div class="col-lg-10">
-            <a href="#"  onclick="transitionTo(event, '/produtos/criar')" class="btn btn-success pull-right">Adicionar</a>
-            <table class="table">
+            <a href="#" onclick="transitionTo(event, '/produtos/criar')"
+                class="btn btn-success pull-right">Adicionar</a>
+            <table class="table" id="produtos">
                 <thead>
                     <tr>
                         <th style="width:15%"> ID </th>

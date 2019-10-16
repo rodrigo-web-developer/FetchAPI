@@ -1,12 +1,56 @@
-<script src="/src/categoria/categoria.js"></script>
+<script type="text/javascript" src="/src/categoria/categoria.js"></script>
 <script>
-    
+    var id = window.location.pathname.match(/\d+$/);
+    async function preencherProduto() {
+        var form = document.getElementById("form-produto");
+        var dropDown = document.getElementById("select-categoria");
+        var r = await buscarCategorias();
+        var resposta = await r.json();
+        if (r.status != 200)
+            processarErros(resposta);
+        else
+            loadDropDown(resposta, dropDown, "descricao");
+        if (id) {
+            var p =  await fetch(getUrlApi() + "/api/produto/" + id);
+            var produto = await p.json();
+            if(p.status == 200){
+                preencherDadosForm(produto, form);
+            }
+        }
+    }
+    async function salvar(event) {
+        event.preventDefault();
+        var form = event.target;
+        var method = "POST";
+        if (id) {
+            method = "PUT";
+        }
+        var data = formDataToJson(form, id && id[0]);
+        var r = await fetch(getUrlApi() + "/api/produto", {
+            body: data.string,
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + localStorage.getItem("token")
+            },
+            method: method
+        });
+        if (r.status == 401) {
+            return processarErros({ mensagem: "Usuário não autorizado." });
+        }
+        var resposta = await r.json();
+        if (r.status != 200) {
+            processarErros(resposta);
+        } else {
+            transitionTo(null, "/produtos");
+        }
+    }
+    setTimeout(preencherProduto, 10);
 </script>
 
 <div class="row">
     <div class="col-md-6">
         <h3 id="header-form">Produto</h3>
-        <form onsubmit="teste(event)">
+        <form onsubmit="salvar(event)" id="form-produto">
             <div class="form-group">
                 <label for="nome" class="control-label">Nome: </label>
                 <input required name="nome" class="form-control" />
@@ -21,7 +65,8 @@
             </div>
             <div class="form-group">
                 <label for="descricao">Categoria: </label>
-                <select style="overflow-y:scroll; max-height: 80px;" class="form-control" name="categoria" id="select-categoria"></select>
+                <select style="overflow-y:scroll; max-height: 80px;" class="form-control" name="categoria"
+                    id="select-categoria"></select>
             </div>
             <div class="form-group">
                 <label for="descricao">Descrição: </label>

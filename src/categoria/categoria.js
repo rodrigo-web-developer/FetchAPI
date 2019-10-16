@@ -10,5 +10,5 @@ function salvarCategoria(body, method) {
             "Authorization": "Bearer " + localStorage.getItem("token")
         },
         method: method
-    })
+    });
 }

@@ -18,7 +18,13 @@ function formDataToJson(form, id) {
     var json = {};
     if (id) json.id = id;
     for (const item of data.keys()) {
-        json[item] = data.get(item);
+        const v = data.get(item);
+        if (String(v).match(/^\d+$/)) {
+            json[item] = Number(data.get(item));
+        }
+        else {
+            json[item] = data.get(item);
+        }
     }
     return { string: JSON.stringify(json), object: json };
 }
@@ -74,7 +80,8 @@ function preencherDadosForm(dados, form) {
     var selects = form.getElementsByTagName("select");
     for (let index = 0; index < selects.length; index++) {
         const select = selects[index];
-        select.value = dados[select.name];
+        let option = select.querySelector("option[value='" + dados[select.name].id + "']");
+        option.selected = true;
     }
 }
 
