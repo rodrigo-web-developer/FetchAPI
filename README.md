@@ -22,7 +22,31 @@ De modo geral, o curso apresentou:
 
 ## Como executar
 - Clone o repositório para sua máquina.
-- Suba a aplicação em qualquer web server (Apache, Tomcat, IIS, Kestrel, Node Express, Python HttpServer) - isso é necessário para que a aplicação execute com um endereço válido ("localhost", por exemplo)
+- Suba a aplicação em qualquer web server da sua preferência (Apache, Tomcat, IIS, Kestrel, Node Express, Python HttpServer) - isso é necessário para que a aplicação execute com um endereço válido ("localhost", por exemplo)
 - Acesse o endereço da aplicação pelo browser e pronto, já está funcionando.
 
-- **OBS**: para facilitar a execução do servidor pelos alunos, foi utilizado o Python 3.7, caso tenha o Python instalado em sua máquina, apenas execute no terminal/cmd o comando "python server.py" e a aplicação estará rodando em localhost:5050. **Não é obrigatório utilizar o arquivo server.py, pois foi feito apenas para executar rapidamente um servidor HTTP.**
+## Pronto para executar
+Para facilitar a execução do servidor pelos alunos, foi utilizado o Python 3.7 ou Node JS. **Não é obrigatório utilizar o arquivo server.py ou server.js, pois foi feito apenas para executar rapidamente um servidor HTTP com endereço válido.**
+
+### Python 3.6+
+Caso tenha instalado o Python em sua máquina, abra o terminal/cmd no diretório da aplicação e execute o seguinte comando:
+
+```python server.py``` 
+
+ou 
+
+```py server.py``` 
+
+dependendo de como está configurado o comando no seu computador. 
+
+Pronto, sua aplicação estará rodando em localhost:5050
+
+### Node.js (6.0.0+)
+Caso tenha o node instalado em sua máquina, abra o terminal/cmd no diretório da aplicação e execute os seguintes comandos:
+
+```
+npm install express
+node server.js
+```
+
+Pronto, sua aplicação estará rodando em localhost:5050
