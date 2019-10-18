@@ -22,7 +22,7 @@ De modo geral, o curso apresentou:
 
 ## Como executar
 - Clone o repositório para sua máquina.
-- Suba a aplicação em qualquer web server (Apache, Tomcat, IIS, Kestrel, Python HttpServer) - isso é necessário para que a aplicação execute com um endereço válido ("localhost", por exemplo)
+- Suba a aplicação em qualquer web server (Apache, Tomcat, IIS, Kestrel, Node Express, Python HttpServer) - isso é necessário para que a aplicação execute com um endereço válido ("localhost", por exemplo)
 - Acesse o endereço da aplicação pelo browser e pronto, já está funcionando.
 
 - **OBS**: para facilitar a execução do servidor pelos alunos, foi utilizado o Python 3.7, caso tenha o Python instalado em sua máquina, apenas execute no terminal/cmd o comando "python server.py" e a aplicação estará rodando em localhost:5050. **Não é obrigatório utilizar o arquivo server.py, pois foi feito apenas para executar rapidamente um servidor HTTP.**
